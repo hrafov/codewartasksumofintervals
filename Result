@@ -1,0 +1,116 @@
+import java.util.ArrayList;
+class Result {
+    public static int sumIntervals(int[][] intervals) {
+        ArrayList<int[]> ls = new ArrayList<>();
+        for (int[] i : intervals) ls.add(i);
+        ArrayList<Integer> lsForSum = new ArrayList<>();
+        while (ls.size() > 0) {
+            for (int[] i : ls) {
+                if (isIntersect(i, ls)) {
+                    ArrayList<int[]> result = new ArrayList<>();
+                    result.addAll(mapReduce(i, ls));
+                    ls.add(maxAndMinFromResult(result));
+                    ls.removeAll(result);
+                } else {
+                    lsForSum.add(i[1] - i[0]);
+                    ls.remove(i);
+                }
+                break;
+            }
+        }
+        return sumAllElements(lsForSum);
+    }
+
+    private static int[] maxAndMinFromResult(ArrayList<int[]> result) {
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for (int[] resultInterval : result) {
+            if (resultInterval[0] < min) min = resultInterval[0];
+            if (resultInterval[1] > max) max = resultInterval[1];
+        }
+        return new int[]{min, max};
+    }
+
+    private static boolean isIntersect(int[] i, ArrayList<int[]> ls) {
+        for (int[] k : ls)
+            if (notEqualsIntervals(i, k))
+                if ((i[0] >= k[0] && i[0] <= k[1]) || (i[1] >= k[0] && i[1] <= k[1]) ||
+                        (k[0] >= i[0] && k[0] <= i[1]) || (k[1] >= i[0] && k[1] <= i[1])) return true;
+        return false;
+    }
+
+    private static boolean notEqualsIntervals(int[] i, int[] k) {
+        if (i[0] != k[0] || i[1] != k[1]) return true;
+        return false;
+    }
+
+    private static boolean isIntersectIntervals(int[] i, int[] k) {
+        if ((i[0] >= k[0] && i[0] <= k[1]) || (i[1] >= k[0] && i[1] <= k[1]) ||
+                (k[0] >= i[0] && k[0] <= i[1]) || (k[1] >= i[0] && k[1] <= i[1])) return true;
+        return false;
+    }
+
+    private static ArrayList<int[]> mapReduce(int[] i, ArrayList<int[]> ls) {
+        ArrayList<int[]> result = new ArrayList<>();
+        for (int[] k : ls) if (isIntersectIntervals(i, k)) result.add(k);
+        return result;
+    }
+
+    private static int sumAllElements(ArrayList<Integer> elements) {
+        int sum = 0;
+        for (int i = 0; i < elements.size(); i++)
+            sum += elements.get(i).intValue();
+        return sum;
+    }
+
+    public static void main(String[] args) {
+//        //0
+//        System.out.println(sumIntervals(new int[][]{}));
+//        System.out.println(sumIntervals(new int[][]{{4, 4}, {6, 6}, {8, 8}}));
+//
+//        //9
+//        System.out.println(sumIntervals(new int[][]{{1, 2}, {6, 10}, {11, 15}}));
+//        //11
+//        System.out.println(sumIntervals(new int[][]{{4, 8}, {9, 10}, {15, 21}}));
+//        //7
+//        System.out.println(sumIntervals(new int[][]{{-1, 4}, {-5, -3}}));
+//        //78
+//        System.out.println(sumIntervals(new int[][]{{-245, -218}, {-194, -179}, {-155, -119}}));
+
+//        //2_000_000_000
+//        System.out.println(sumIntervals(new int[][]{{-1_000_000_000, 1_000_000_000}}));
+//        //100_000_030
+//        System.out.println(sumIntervals(new int[][]{{0, 20}, {-100_000_000, 10}, {30, 40}}));
+
+//        //54
+//        System.out.println(sumIntervals(new int[][]{{1, 2}, {2, 6}, {6, 55}}));
+//        //23
+//        System.out.println(sumIntervals(new int[][]{{-2, -1}, {-1, 0}, {0, 21}}));
+//
+//        //7
+//        System.out.println(sumIntervals(new int[][]{{1, 4}, {7, 10}, {3, 5}}));
+//        //6
+//        System.out.println(sumIntervals(new int[][]{{5, 8}, {3, 6}, {1, 2}}));
+//        //19
+//        System.out.println(sumIntervals(new int[][]{{1, 5}, {10, 20}, {1, 6}, {16, 19}, {5, 11}}));
+
+//        //13
+//        System.out.println(sumIntervals(new int[][]{{2, 5}, {-1, 2}, {-40, -35}, {6, 8}}));
+//        //1234
+//        System.out.println(sumIntervals(new int[][]{{-7, 8}, {-2, 10}, {5, 15}, {2000, 3150}, {-5400, -5338}}));
+//        //158
+//        System.out.println(sumIntervals(new int[][]{{-101, 24}, {-35, 27}, {27, 53}, {-105, 20}, {-36, 26},}));
+
+//        //115
+//        System.out.println(sumIntervals(new int[][]{{-152, -144}, {270, 283}, {-197, -182}, {465, 484}, {311, 313},
+//                {96, 108}, {-437, -432}, {290, 303}, {481, 494}, {186, 192},
+//                {471, 473}, {399, 400}, {62, 72}, {271, 273}, {299, 304}}));
+        //196
+        System.out.println(sumIntervals(new int[][]{{230, 243}, {-495, -490}, {-56, -53}, {192, 209}, {137, 148},
+            {-138, -128}, {426, 441}, {-485, -469}, {-348, -328}, {27, 39},
+                {-288, -274}, {281, 282}, {-257, -239}, {-370, -363}, {-157, -142},
+                    {459, 477}, {229, 243}}));
+
+
+    }
+}
