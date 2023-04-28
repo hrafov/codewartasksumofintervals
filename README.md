@@ -1,0 +1,2 @@
+# codewartasksumofintervals
+task from codewars
